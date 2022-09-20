@@ -1,46 +1,28 @@
 #include "main.h"
-#include "2-strlen.c"
 
 /**
- * _atoi - converts string to integer
- * @s: string to convert
- *
- * Return: returns integer value
+ * _atoi - convert a string to an integer.
+ * @s: char type string
+ * Return: integer converted
  */
+
 int _atoi(char *s)
 {
-	int i;
-	int np = 0;
-	int c;
-	int d = 1;
-	int num = 0;
+	int sign = 1, resp = 0, firstNum;
 
-	for (i = 0; i < _strlen(s); i++)
+	for (firstNum = 0; !(s[firstNum] >= 48 && s[firstNum] <= 57); firstNum++)
 	{
-		if (!(s[i] >= '0' && s[i] <= '9') && c > 0)
-			break;
-		if (s[i] == '-')
-			np--;
-		if (s[i] == '+')
-			np++;
-		if (s[i] >= '0' && s[i] <= '9')
+		if (s[firstNum] == '-')
 		{
-			c++;
+			sign *= -1;
 		}
 	}
-	while (c > 0)
+
+	for (int i = firstNum; s[i] >= 48 && s[i] <= 57; i++)
 	{
-		num += ((s[i - 1] - '0') * d);
-		i--;
-		c--;
-		d *= 10;
+		resp *= 10;
+		resp += (s[i] - 48);
 	}
-	if (np >= 0)
-	{
-		num *= 1;
-	} else
-	{
-		num *= -1;
-	}
-	return (num);
+
+	return (sign * resp);
 }

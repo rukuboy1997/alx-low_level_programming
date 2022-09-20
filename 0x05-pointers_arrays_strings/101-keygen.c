@@ -8,27 +8,26 @@
  *
  * key_gen - password generator
  *
- * @N: length of the password
+ * return: Always zero(success)
  *
  */
 
-void key_gen(int N)
+int key_gen(void)
 {
 	int i;
 	int r;
-
-	srand((unsigned int)(time(NULL)));
 
 	char numbers[] = "0123456789";
 	char letter[] = "abcdefghijklmnoqprstuvwyzx";
 	char LETTER[] = "ABCDEFGHIJKLMNOQPRSTUYWVZX";
 	char symbols[] = "!@#$^&*?";
+	char password[12];
 
-	char password[N];
+	srand((unsigned int)(time(NULL)));
 
 	r = rand() % 4;
 
-	for (i = 0; i < N; i++)
+	for (i = 0; i < 12; i++)
 	{
 		if (r == 1)
 		{
@@ -55,15 +54,14 @@ void key_gen(int N)
 			printf("%c", password[i]);
 		}
 	}
+	return (0);
 }
 
 
 
 int main(void)
 {
-	int N = 12;
-
-	key_gen(N);
+	key_gen();
 
 	return (0);
 }
