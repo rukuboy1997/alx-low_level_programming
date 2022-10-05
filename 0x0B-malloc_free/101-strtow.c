@@ -1,111 +1,67 @@
 #include "main.h"
+#include <stdlib.h>
 
 /**
- * _strlen - find length of a string
- * @s: string
- * Return: int
+ * ch_free_grid - frees a 2 dimensional array.
+ * @grid: multidimensional array of char.
+ * @height: height of the array.
+ *
+ * Return: no return
  */
-
-
-int _strlen(char *s)
+void ch_free_grid(char **grid, unsigned int height)
 {
-int size = 0;
-for (; s[size] != '\0'; size++)
-;
-return (size);
-}
-
-/**
- * *str_addChar - concatenates two strings
- * @str: string 1
- * @c: string 2
- * Return: pointer
- */
-
-char *str_addChar(char *str, char c)
-{
-int size, i;
-char *m;
-
-size = _strlen(str);
-
-m = malloc((size + 1) * sizeof(char) + 1);
-if (m == 0)
-	return (0);
-
-for (i = 0; i <= size; i++)
-	m[i] = str[i];
-
-m[i + 1] = c;
-m[i + 2] = '\0';
-
-return (m);
-}
-
-
-/**
- * *nbr_spaces - return the number of occurent of a string
- * @s: string to check
- * Return: int
- */
-
-unsigned int nbr_spaces(char *s)
-{
-	int i, cmpt = 0;
-
-	for (i = 0; s[i + 1] != '\0'; i++)
+	if (grid != NULL && height != 0)
 	{
-		if (s[i]  == ' ' && s[i + 1] != ' ')
-			cmpt++;
+		for (; height > 0; height--)
+			free(grid[height]);
+		free(grid[height]);
+		free(grid);
 	}
-
-	return (cmpt + 1);
 }
 
-
 /**
-  *strtow - split a sentence into multiple words.
-  *@str: the string passed as argument.
-  *Return: tokens
-  */
+ * strtow - splits a string into words.
+ * @str: string.
+ *
+ * Return: pointer of an array of integers
+ */
 char **strtow(char *str)
 {
-int i;
-int spaces = nbr_spaces(str);
-char **tokens = NULL;
-char *token;
-int checkingSpace = 0;
-int word = 0;
+	char **aout;
+	unsigned int c, height, i, j, a1;
 
-if (!tokens)
-{
-	printf("Failed");
-	return (0);
-}
-
-printf("looping");
-for (i = 0; str[i] != '\0'; i++)
-{
-	if (str[i] == ' ')
+	if (str == NULL || *str == '\0')
+		return (NULL);
+	for (c = height = 0; str[c] != '\0'; c++)
+		if (str[c] != ' ' && (str[c + 1] == ' ' || str[c + 1] == '\0'))
+			height++;
+	aout = malloc((height + 1) * sizeof(char *));
+	if (aout == NULL || height == 0)
 	{
-		if (checkingSpace == 0)
+		free(aout);
+		return (NULL);
+	}
+	for (i = a1 = 0; i < height; i++)
+	{
+		for (c = a1; str[c] != '\0'; c++)
 		{
-			word++;
-			checkingSpace = 1;
+			if (str[c] == ' ')
+				a1++;
+			if (str[c] != ' ' && (str[c + 1] == ' ' || str[c + 1] == '\0'))
+			{
+				aout[i] = malloc((c - a1 + 2) * sizeof(char));
+				if (aout[i] == NULL)
+				{
+					ch_free_grid(aout, i);
+					return (NULL);
+				}
+				break;
+			}
 		}
+		for (j = 0; a1 <= c; a1++, j++)
+			aout[i][j] = str[a1];
+		aout[i][j] = '\0';
 	}
-	else
-	{
-		printf("1");
-		token = tokens[word];
-		free(tokens[word]);
-		str_addChar(token, str[i]);
-		checkingSpace = 0;
-	}
-
-}
-
-tokens[i] = NULL;
-
-return (tokens);
+	aout[i] = NULL;
+	return (aout);
 }
